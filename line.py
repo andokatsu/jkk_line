@@ -17,7 +17,14 @@ from selenium.webdriver.common.by import By
 #待機時間を設定(対象が見つからなかったら再度探す時間)=暗黙的な待機
 driver.implicitly_wait(10)
 #スクレイピング対象HPを指定
-driver.get('https://www.library.chiyoda.tokyo.jp/')
+driver.get('https://jhomes.to-kousya.or.jp/search/jkknet/service/akiyaJyoukenStartInit')
 #HTMLのタブで括られたオブジェクト指定して探すために、find_elementというメソッドを使用
-schedule_el = driver.find_elements(By.CLASS_NAME, "schedule-list01__title")
-print([s.text for s in schedule_el])
+element = driver.find_element(By.LINK_TEXT, "こちら")
+element.click()
+
+element1 = driver.find_elements(By.CLASS_NAME, "cellFFFFFF")
+print([s.text for s in element1])
+
+
+# element_2 = driver.find_elements(By.ID, "ku")
+# print([s.text for s in element_2])
