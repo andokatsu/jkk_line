@@ -43,9 +43,11 @@ driver.get('https://jhomes.to-kousya.or.jp/search/jkknet/service/akiyaJyoukenSta
 element = driver.find_element(By.LINK_TEXT, "こちら")
 element.click()
 
-element1 = driver.find_elements(By.CLASS_NAME, "cellFFFFFF")
-print([s.text for s in element1])
+ # 新しいタブに切り替え
+driver.switch_to.window(driver.window_handles[-1])  # 最新のタブに切り替え
 
+# element1 = driver.find_elements(By.CLASS_NAME, "cellFFFFFF")
+# print([s.text for s in element1])
 
-# element_2 = driver.find_elements(By.ID, "ku")
-# print([s.text for s in element_2])
+element_2 = driver.find_elements(By.XPATH, '/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[5]/td/table/tbody/tr[1]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[4]/td[3]/label')
+print([s.text for s in element_2])
