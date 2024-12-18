@@ -4,13 +4,12 @@
 #selenium  4.18.1
 
 import time
-import requests
+import line_test
 
 #自動的にChromeDriverのバージョンをブラウザのバージョンと一致させる
 #webdriver-managerは各ブラウザのバージョンを自動で確認して実行してくれるライブラリ
 #ブラウザのバージョンアップの度にドライバを用意するという手間が省ける
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
@@ -18,6 +17,11 @@ driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install())
 
 #By関数を使用するため、Byをインポート
 from selenium.webdriver.common.by import By
+#WebDriverWaitをインポート
+from selenium.webdriver.support.ui import WebDriverWait
+#expected_conditionsで状態変化を調べる
+from selenium.webdriver.support import expected_conditions as EC
+
 
 #港区の空き部屋情報をチェック
 def check_vacancies():
@@ -46,8 +50,31 @@ element.click()
  # 新しいタブに切り替え
 driver.switch_to.window(driver.window_handles[-1])  # 最新のタブに切り替え
 
-# element1 = driver.find_elements(By.CLASS_NAME, "cellFFFFFF")
-# print([s.text for s in element1])
+ # 対象エリアのチェックボックスを選択
+target_areas = ["港区", "渋谷区", "中央区", "目黒区","中野区","杉並区","中央区","新宿区","文京区"]
+for area in target_areas:
+    checkbox = driver.find_element(By.XPATH, f"//label[contains(text(), '{area}')]/preceding-sibling::input")
+    if not checkbox.is_selected():
+        checkbox.click()
+        print(f"{area} のチェックボックスを選択しました。")
+        time.sleep(0.5)  # チェック間に少し待機
 
-element_2 = driver.find_elements(By.XPATH, '/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[5]/td/table/tbody/tr[1]/td/table/tbody/tr[1]/td[2]/table/tbody/tr[4]/td[3]/label')
-print([s.text for s in element_2])
+# 「検索する」ボタンをクリック
+search_button = driver.find_element(By.XPATH, "/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[5]/td/table/tbody/tr[3]/td/a/img")
+search_button.click()
+print("検索ボタンをクリックしました。")
+
+# 結果が表示されるまで待機
+# WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "result_list")))
+driver.implicitly_wait(5)
+
+if driver.find_element(By.XPATH,"/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[4]/td/ul/li"):
+    print("空き部屋は見つかりませんでした。")
+    
+elif driver.find_element(By.XPATH,""):
+    
+    message = f"指定エリア（港区、渋谷区、中央区、目黒区、中野区、杉並区、中央区、新宿区、文京区）に {len()} 件の空き部屋があります！"
+    print(message)
+    line_test.line(message)
+else:
+    print("1件空き部屋が見つかりました")
