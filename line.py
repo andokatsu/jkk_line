@@ -58,6 +58,16 @@ for area in target_areas:
         checkbox.click()
         print(f"{area} のチェックボックスを選択しました。")
         time.sleep(0.5)  # チェック間に少し待機
+        
+# 駅までの所要時間を設定
+#station_time = "5分以内" 
+station = "10分以内" 
+#station_time = "15分以内" 
+
+# 駅までの所要時間を選択
+radio_button = driver.find_element(By.XPATH, f"//label[contains(text(), '{station}')]/preceding-sibling::input")
+radio_button.click()
+print(f"駅までの所要時間を「{station}」に設定しました。")
 
 # 「検索する」ボタンをクリック
 search_button = driver.find_element(By.XPATH, "/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[5]/td/table/tbody/tr[3]/td/a/img")
@@ -65,15 +75,17 @@ search_button.click()
 print("検索ボタンをクリックしました。")
 
 # 結果が表示されるまで待機
-# WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "result_list")))
 driver.implicitly_wait(5)
 
-if driver.find_element(By.XPATH,"/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[4]/td/ul/li"):
+if driver.find_elements(By.XPATH,"/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[4]/td/ul/li"):
     print("空き部屋は見つかりませんでした。")
     
-elif driver.find_element(By.XPATH,""):
+elif driver.find_elements(By.XPATH,"/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[7]/td/table/tbody/tr/td/table/tbody/tr[1]/td/table/tbody/tr/td[2]/strong"):
+
+    x = driver.find_element(By.XPATH,"/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[11]/td/table")   
+    a = len(x.find_elements(By.TAG_NAME,"tr"))-1
     
-    message = f"指定エリア（港区、渋谷区、中央区、目黒区、中野区、杉並区、中央区、新宿区、文京区）に {len()} 件の空き部屋があります！"
+    message = f'指定エリア（港区、渋谷区、中央区、目黒区、中野区、杉並区、中央区、新宿区、文京区）で {a}件の空き部屋があります！'
     print(message)
     line_test.line(message)
 else:
