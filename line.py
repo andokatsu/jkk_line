@@ -51,7 +51,7 @@ element.click()
 driver.switch_to.window(driver.window_handles[-1])  # 最新のタブに切り替え
 
  # 対象エリアのチェックボックスを選択
-target_areas = ["港区", "渋谷区", "中央区", "目黒区","中野区","杉並区","中央区","新宿区","文京区"]
+target_areas = ["品川区","渋谷区", "新宿区", "杉並区", "中央区","千代田区","中野区","文京区","港区","目黒区"]
 for area in target_areas:
     checkbox = driver.find_element(By.XPATH, f"//label[contains(text(), '{area}')]/preceding-sibling::input")
     if not checkbox.is_selected():
@@ -60,14 +60,34 @@ for area in target_areas:
         time.sleep(0.5)  # チェック間に少し待機
         
 # 駅までの所要時間を設定
-#station_time = "5分以内" 
+#station = "5分以内" 
 station = "10分以内" 
-#station_time = "15分以内" 
+#station = "15分以内" 
 
 # 駅までの所要時間を選択
 radio_button = driver.find_element(By.XPATH, f"//label[contains(text(), '{station}')]/preceding-sibling::input")
 radio_button.click()
 print(f"駅までの所要時間を「{station}」に設定しました。")
+
+# 階層の設定（例：1階から10階まで）
+min_floor = "2"  # 最小階
+max_floor = ""  # 最大階
+
+min_floor_input = driver.find_element(By.XPATH, "/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[5]/td/table/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/input[1]")
+min_floor_input.clear()  # 既存の値をクリア
+min_floor_input.send_keys(min_floor)
+print(f"最小階を {min_floor} に設定しました。")
+
+max_floor_input = driver.find_element(By.XPATH, "/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[5]/td/table/tbody/tr[6]/td/table/tbody/tr[1]/td[2]/input[2]")
+max_floor_input.clear()  # 既存の値をクリア
+max_floor_input.send_keys(max_floor)
+print(f"最大階を {max_floor} に設定しました。")
+
+ # 築年数の設定（こだわらない、5年以内、10年以内、15年以内、20年以内の選択肢あり）
+years = "10年以内"
+radio_button = driver.find_element(By.XPATH, f"//label[contains(text(), '{years}')]/preceding-sibling::input[@type='radio']")
+radio_button.click()
+print(f"築年数を {years} に設定しました。")
 
 # 「検索する」ボタンをクリック
 search_button = driver.find_element(By.XPATH, "/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[5]/td/table/tbody/tr[3]/td/a/img")
@@ -85,8 +105,10 @@ elif driver.find_elements(By.XPATH,"/html/body/div/table[1]/tbody/tr[2]/td/form/
     x = driver.find_element(By.XPATH,"/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[11]/td/table")   
     a = len(x.find_elements(By.TAG_NAME,"tr"))-1
     
-    message = f'指定エリア（港区、渋谷区、中央区、目黒区、中野区、杉並区、中央区、新宿区、文京区）で {a}件の空き部屋があります！'
+    message = f'指定エリア（品川区,渋谷区, 新宿区, 杉並区, 中央区,千代田区,中野区,文京区,港区,目黒区）で {a}件の空き部屋があります！'
     print(message)
-    line_test.line(message)
+    #line_test.line(message)
 else:
-    print("1件空き部屋が見つかりました")
+    linesend = "1件空き部屋が見つかりました"
+    print(f'{linesend}')
+    #line_test.line(linesend)
