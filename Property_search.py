@@ -25,7 +25,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 #物件検索の関数
-def property_serach():
+def property_search():
     
     try:
         #設定の関数
@@ -103,7 +103,7 @@ def property_serach():
         driver.implicitly_wait(5)
 
         if driver.find_elements(By.XPATH,"/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[4]/td/ul/li"):
-            print("空き部屋は見つかりませんでした。")
+            return print("空き部屋は見つかりませんでした。")
             
         elif driver.find_elements(By.XPATH,"/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[7]/td/table/tbody/tr/td/table/tbody/tr[1]/td/table/tbody/tr/td[2]/strong"):
 
@@ -111,12 +111,12 @@ def property_serach():
             a = len(x.find_elements(By.TAG_NAME,"tr"))-1
             
             message = f'指定エリア（品川区,渋谷区, 新宿区, 杉並区, 中央区,千代田区,中野区,文京区,港区,目黒区）で {a}件の空き部屋があります！'
-            print(message)
             Notify_line.line(message)
+            print(message)
         else:
             linesend = "1件空き部屋が見つかりました"
-            print(f'{linesend}')
             Notify_line.line(linesend)
+            print(f'{linesend}')
         
     except Exception as e:
             print(f"エラーが発生しました: {e}")
@@ -124,4 +124,4 @@ def property_serach():
     finally:
         driver.quit()
         
-property_serach()
+property_search()

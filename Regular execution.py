@@ -1,10 +1,15 @@
 #スクリプトを定期実行するためにscheduleをインポート
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 import schedule
 import time
-import Property_search
+from Property_search import property_search
 
 # 1時間ごとに関数を実行するスケジュールを設定
-Property_search.property_search(schedule.every(1).hours.do())
+schedule.every(30).minutes.do(property_search)
 
 # スケジュールを処理
 print("定期実行を開始します...")
