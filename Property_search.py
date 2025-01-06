@@ -15,34 +15,20 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
-driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
 #By関数を使用するため、Byをインポート
 from selenium.webdriver.common.by import By
-#WebDriverWaitをインポート
-from selenium.webdriver.support.ui import WebDriverWait
-#expected_conditionsで状態変化を調べる
-from selenium.webdriver.support import expected_conditions as EC
 
 #物件検索の関数
 def property_search():
     
-    try:
-        #設定の関数
-        def configuration():
-            
-            # Seleniumの設定
-            options = Options()
-            options.add_argument("--headless")  # ヘッドレスモードで実行→Chrome ヘッドレス モードを使用すると、
-            #UI を表示せずに無人環境でブラウザを実行できます。つまり、Chrome なしで Chrome を実行できます。
-            options.add_argument("--disable-dev-shm-usage") # ディスクのメモリスペースを使う。DockerやGcloudのメモリ対策でよく使われる。
-            #下記2行は不要/ソース→ https://qiita.com/kawagoe6884/items/cea239681bdcffe31828
-            # options.add_argument("--disable-gpu")
-            # options.add_argument("--no-sandbox")
-            
-            #pip install chromedriver-binary-autoをターミナル(cmdで実行したため下記は不要な認識)
-            #service = Service('/path/to/chromedriver')  # Chromedriverのパス
-            
+    try:            
+        # Seleniumの設定
+        options = Options()
+        options.add_argument("--headless")  # ヘッドレスモードで実行→Chrome ヘッドレス モードを使用すると、
+        #UI を表示せずに無人環境でブラウザを実行できます。つまり、Chrome なしで Chrome を実行できます。
+        options.add_argument("--disable-dev-shm-usage") # ディスクのメモリスペースを使う。DockerやGcloudのメモリ対策でよく使われる。
+        driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()),options=options)
                                                         
         #待機時間を設定(対象が見つからなかったら再度探す時間)=暗黙的な待機
         driver.implicitly_wait(10)
@@ -66,8 +52,8 @@ def property_search():
                 
         # 駅までの所要時間を設定(コメントアウトしていない行の条件で検索する)
         #station = "5分以内" 
-        station = "10分以内" 
-        #station = "15分以内" 
+        #station = "10分以内" 
+        station = "15分以内" 
 
         # 駅までの所要時間を選択
         radio_button = driver.find_element(By.XPATH, f"//label[contains(text(), '{station}')]/preceding-sibling::input")
@@ -88,11 +74,11 @@ def property_search():
         max_floor_input.send_keys(max_floor)
         print(f"最大階を {max_floor} に設定しました。")
 
-        # 築年数の設定（years=こだわらない、5年以内、10年以内、15年以内、20年以内の選択肢あり）
-        years = "10年以内"
+        # 築年数の設定（years=こだわらない、5年以内、10年以内、15年以内の選択肢あり）
+        years = "15年以内"
         radio_button = driver.find_element(By.XPATH, f"//label[contains(text(), '{years}')]/preceding-sibling::input[@type='radio']")
         radio_button.click()
-        print(f"築年数を {years} に設定しました。")
+        print(f"築年数を「 {years}」 に設定しました。")
 
         # 「検索する」ボタンをクリック
         search_button = driver.find_element(By.XPATH, "/html/body/div/table[1]/tbody/tr[2]/td/form/table/tbody/tr[5]/td/table/tbody/tr[3]/td/a/img")
